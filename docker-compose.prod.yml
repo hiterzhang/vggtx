@@ -1,0 +1,21 @@
+services:
+  vggt:
+    image: ${VGGT_IMAGE:-ghcr.io/your-github-user/vggt:latest}
+    container_name: vggt
+    restart: unless-stopped
+    gpus: all
+    ports:
+      - "8080:8080"
+    environment:
+      TORCH_HOME: /opt/vggt-cache/torch
+      VGGT_PYTHON: /opt/vggt-env/bin/python
+      VGGT_MODEL_PATH: /opt/vggt-cache/torch/hub/checkpoints/model.pt
+      VGGT_REQUIRE_LOCAL_WEIGHTS: "1"
+      VGGT_EXAMPLES_ROOT: /data/vggt/examples
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    volumes:
+      - ./data/torch-cache:/opt/vggt-cache/torch
+      - ./data/examples:/data/vggt/examples
+      - ./outputs:/app/vggt/outputs
+    command: ["./run_example_lowmem.sh", "room", "all", "8080"]
