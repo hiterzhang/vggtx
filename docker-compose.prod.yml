@@ -15,7 +15,13 @@ services:
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
     volumes:
-      - ./data/torch-cache:/opt/vggt-cache/torch
-      - ./data/examples:/data/vggt/examples
-      - ./outputs:/app/vggt/outputs
+      - type: bind
+        source: ./data/torch-cache
+        target: /opt/vggt-cache/torch
+      - type: bind
+        source: ./data/examples
+        target: /data/vggt/examples
+      - type: bind
+        source: ./outputs
+        target: /app/vggt/outputs
     command: ["./run_example_lowmem.sh", "room", "all", "8080"]
